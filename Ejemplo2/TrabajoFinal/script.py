@@ -1,8 +1,8 @@
 import requests
 import os
 import urllib.request
-
-url = 'https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD'
+url = 'https://www.datos.gov.co/resource/gt2j-8ykr.json?ciudad_de_ubicaci_n=Medell%C3%ADn'
+#url = 'https://www.datos.gov.co/api/views/gt2j-8ykr/rows.csv?accessType=DOWNLOAD'
 ## Se obtiene el código html de la página
 response = requests.get(url)
 
@@ -10,9 +10,14 @@ response = requests.get(url)
 ## <Response [200]> indica que fue correcta
 ## la apertura
 response
+med=pd.read_json(response.text)
+import matplotlib.pyplot as plt
+def graficar(x, y, labelX, labelY):
+    plt.figure()
+    plt.scatter(x, y)
+    plt.xlabel(labelX)
+    plt.ylabel(labelY)
+    plt.savefig('figura2')
+    plt.show()
 
-with open("covid.txt", "w") as text_file:
-    text_file.write(response.text)
-
-df=pd.read_csv("covid.txt", sep=',')
-df.head()
+graficar(med['tipo'], med['edad'], 'tipo', 'edad')
